@@ -99,9 +99,9 @@ darkToggle.onclick = () => {
 /* SHORTCUTS */
 document.addEventListener("keydown", e => {
   if (!e.ctrlKey) return;
-  if (e.key === "b") { e.preventDefault(); cmd("bold"); }
-  if (e.key === "i") { e.preventDefault(); cmd("italic"); }
-  if (e.key === "u") { e.preventDefault(); cmd("underline"); }
+boldBtn.onclick = () => applyFormat("bold");
+italicBtn.onclick = () => applyFormat("italic");
+underlineBtn.onclick = () => applyFormat("underline");
 });
 
 /* SERVICE WORKER */
