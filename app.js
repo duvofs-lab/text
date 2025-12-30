@@ -23,18 +23,15 @@ updateCounts();
 document.getElementById("copyBtn").onclick = () =>
   navigator.clipboard.writeText(editor.innerText);
 
-/* FORMAT */
+/* APPLY FORMAT (Works selected OR entire) */
 function applyFormat(command) {
   const selection = window.getSelection();
-
-  // If text is selected → normal behavior
   if (selection && selection.toString().length > 0) {
     document.execCommand(command);
     editor.focus();
     return;
   }
 
-  // If no selection → apply to ALL content
   const range = document.createRange();
   range.selectNodeContents(editor);
 
@@ -43,11 +40,26 @@ function applyFormat(command) {
 
   document.execCommand(command);
 
-  // Clear selection and place cursor at end
   selection.removeAllRanges();
   editor.focus();
 }
 
+boldBtn.onclick = () => applyFormat("bold");
+italicBtn.onclick = () => applyFormat("italic");
+underlineBtn.onclick = () => applyFormat("underline");
+
+/* RESET FORMAT */
+resetFormatBtn.onclick = () => {
+  const selection = window.getSelection();
+
+  if (selection && selection.toString().length > 0) {
+    document.execCommand("removeFormat");
+  } else {
+    editor.innerText = editor.innerText;
+  }
+
+  updateCounts();
+  editor.focus();
 };
 
 /* TRANSFORM */
@@ -61,10 +73,14 @@ function transform(fn) {
   } else editor.innerText = fn(editor.innerText);
   updateCounts();
 }
+
 upperBtn.onclick = () => transform(t => t.toUpperCase());
 lowerBtn.onclick = () => transform(t => t.toLowerCase());
-capWordsBtn.onclick = () => transform(t => t.replace(/\b\w/g, c => c.toUpperCase()));
-capSentenceBtn.onclick = () => transform(t => t.replace(/(^\s*\w|[.!?]\s*\w)/g, c => c.toUpperCase()));
+capWordsBtn.onclick = () =>
+  transform(t => t.replace(/\b\w/g, c => c.toUpperCase()));
+
+capSentenceBtn.onclick = () =>
+  transform(t => t.replace(/(^\s*\w|[.!?]\s*\w)/g, c => c.toUpperCase()));
 
 /* DOCX */
 saveDocBtn.onclick = () => {
@@ -89,6 +105,7 @@ if (localStorage.getItem(DARK_KEY) === "on") {
   document.documentElement.classList.add("dark");
   darkToggle.textContent = "☀️";
 }
+
 darkToggle.onclick = () => {
   document.documentElement.classList.toggle("dark");
   const on = document.documentElement.classList.contains("dark");
@@ -99,10 +116,10 @@ darkToggle.onclick = () => {
 /* SHORTCUTS */
 document.addEventListener("keydown", e => {
   if (!e.ctrlKey) return;
-boldBtn.onclick = () => applyFormat("bold");
-italicBtn.onclick = () => applyFormat("italic");
-underlineBtn.onclick = () => applyFormat("underline");
+  if (e.key === "b") { e.preventDefault(); applyFormat("bold"); }
+  if (e.key === "i") { e.preventDefault(); applyFormat("italic"); }
+  if (e.key === "u") { e.preventDefault(); applyFormat("underline"); }
 });
 
-/* SERVICE WORKER */
+/* SW */
 if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js");
