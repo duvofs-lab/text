@@ -102,3 +102,28 @@ body {
   color: #fff;
 }
 
+.dark body {
+  background: #1e1e1e;
+  color: #ffffff;
+}
+
+.dark .editor-wrapper {
+  background: #121212;
+  border-color: #444;
+}
+
+.dark #editor {
+  background: #121212;
+  color: #ffffff;
+}
+
+.dark .ad-box {
+  background: #1e1e1e;
+  border-color: #444;
+}
+
+.dark button {
+  background: #333;
+  color: #fff;
+}
+
