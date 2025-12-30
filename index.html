@@ -73,6 +73,20 @@
   updateCounts();
   editor.focus();
 };
+ {
+  const selection = window.getSelection();
+
+  if (selection && selection.toString().length > 0) {
+    document.execCommand("removeFormat");
+  } else {
+    // Remove formatting from entire editor
+    const text = editor.innerText;
+    editor.innerText = text;
+  }
+
+  updateCounts();
+  editor.focus();
+};
   </div>
 
   <div class="group">
