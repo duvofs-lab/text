@@ -1,1 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+
+  <title>Text Formatter & Online Notepad | Duvofs Text Makeover</title>
+
+  <!-- SEO -->
+  <meta name="description" content="Free online text formatter and notepad. Count words and characters, make text bold, italic, underline, uppercase, lowercase, capitalize sentences and export as DOCX or PDF." />
+  <meta name="keywords" content="online notepad, character count, word count, bold text, text formatter, text makeover, italic text, underline text" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#ffffff" />
+
+  <!-- Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Duvofs Text Makeover",
+    "url": "https://text.duvofs.com",
+    "applicationCategory": "UtilityApplication",
+    "operatingSystem": "All",
+    "description": "Free online text formatter and notepad with word count, character count, bold, italic, underline, and export options."
+  }
+  </script>
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+<header class="top-bar">
+  <button id="saveDocBtn">Save as Document</button>
+  <h1>Duvofs Text Makeover</h1>
+  <button id="pdfBtn">Export as PDF</button>
+</header>
+
+<div class="stats-bar">
+  <span>Characters: <b id="charCount">0</b></span>
+  <span>Words: <b id="wordCount">0</b></span>
+</div>
+
+<div class="layout">
+
+  <!-- LEFT AD -->
+  <aside class="ad-box">
+    <!-- Google Adsense (future) -->
+  </aside>
+
+  <!-- EDITOR -->
+  <main class="editor-wrapper">
+    <div id="editor" contenteditable="true" placeholder="Start typing here..."></div>
+  </main>
+
+  <!-- RIGHT AD -->
+  <aside class="ad-box">
+    <!-- Google Adsense (future) -->
+  </aside>
+
+</div>
+
+<div class="controls">
+
+  <button id="copyBtn">Copy Text</button>
+
+  <div class="group">
+    <button id="boldBtn">Make it Bold</button>
+    <button id="italicBtn">Make it Italic</button>
+    <button id="underlineBtn">Underline Text</button>
+    <button id="resetFormatBtn">Back to Normal</button>
+  </div>
+
+  <div class="group">
+    <button id="upperBtn">UPPERCASE ALL</button>
+    <button id="lowerBtn">lowercase all</button>
+    <button id="capWordsBtn">Capitalize Words</button>
+    <button id="capSentenceBtn">Capitalize Sentences</button>
+  </div>
+
+</div>
+
+<!-- PDF -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="app.js"></script>
+
+</body>
+</html>
 
