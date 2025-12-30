@@ -95,7 +95,7 @@ body {
 }
 
 /* =========================
-   BUTTON BASE
+   BUTTON BASE + FEEDBACK
 ========================= */
 .controls button {
   padding: 8px 14px;
@@ -104,12 +104,42 @@ body {
   cursor: pointer;
   font-size: 14px;
   color: #fff;
-  transition: transform 0.1s ease, opacity 0.1s ease;
+  transition:
+    transform 0.12s ease,
+    box-shadow 0.12s ease,
+    filter 0.12s ease,
+    background-color 0.12s ease;
+  box-shadow: 0 3px 0 rgba(0,0,0,0.15);
 }
 
+/* Hover feedback */
 .controls button:hover {
-  opacity: 0.9;
-  transform: translateY(-1px);
+  filter: brightness(1.08);
+}
+
+/* Click feedback (PRESS) */
+.controls button:active {
+  transform: scale(0.96);
+  box-shadow: 0 1px 0 rgba(0,0,0,0.2);
+}
+
+/* Keyboard focus (accessibility) */
+.controls button:focus-visible {
+  outline: 2px solid rgba(0,0,0,0.25);
+  outline-offset: 2px;
+}
+
+/* =========================
+   SUCCESS FLASH (Copy, Save)
+========================= */
+.controls button.flash {
+  animation: flash-success 0.35s ease;
+}
+
+@keyframes flash-success {
+  0%   { filter: brightness(1); }
+  50%  { filter: brightness(1.4); }
+  100% { filter: brightness(1); }
 }
 
 /* =========================
@@ -152,5 +182,5 @@ body {
 }
 
 .dark button {
-  filter: brightness(1.1);
+  filter: brightness(1.05);
 }
