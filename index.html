@@ -2,20 +2,17 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Text Formatter & Online Notepad | Duvofs Text Makeover</title>
+  <title>Duvofs Text Makeover</title>
 
-  <!-- SEO -->
   <meta name="description" content="Free online text formatter and notepad with word count, character count, bold, italic, underline, uppercase, lowercase and DOCX export." />
   <meta name="keywords" content="online notepad, character count, word count, bold text, text formatter, text makeover, italic text, underline text" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <!-- PWA -->
+  <link rel="stylesheet" href="style.css" />
   <link rel="manifest" href="manifest.json" />
   <meta name="theme-color" content="#ffffff" />
 
-  <link rel="stylesheet" href="style.css" />
 </head>
-
 <body>
 
 <header class="top-bar">
@@ -34,17 +31,14 @@
 
 <div class="layout">
 
-  <!-- LEFT AD -->
   <aside class="ad-box">
     <div class="ad-placeholder">Advertisement</div>
   </aside>
 
-  <!-- EDITOR -->
   <main class="editor-wrapper">
-    <div id="editor" contenteditable="true" spellcheck="false"></div>
+    <div id="editor" contenteditable="true"></div>
   </main>
 
-  <!-- RIGHT AD -->
   <aside class="ad-box">
     <div class="ad-placeholder">Advertisement</div>
   </aside>
@@ -59,34 +53,7 @@
     <button id="boldBtn" title="Bold (Ctrl+B)">🅱</button>
     <button id="italicBtn" title="Italic (Ctrl+I)">𝑰</button>
     <button id="underlineBtn" title="Underline (Ctrl+U)">U̲</button>
-    resetFormatBtn.onclick = () => {
-  const selection = window.getSelection();
-
-  if (selection && selection.toString().length > 0) {
-    document.execCommand("removeFormat");
-  } else {
-    // Remove formatting from entire editor
-    const text = editor.innerText;
-    editor.innerText = text;
-  }
-
-  updateCounts();
-  editor.focus();
-};
- {
-  const selection = window.getSelection();
-
-  if (selection && selection.toString().length > 0) {
-    document.execCommand("removeFormat");
-  } else {
-    // Remove formatting from entire editor
-    const text = editor.innerText;
-    editor.innerText = text;
-  }
-
-  updateCounts();
-  editor.focus();
-};
+    <button id="resetFormatBtn" title="Clear Formatting">⨉</button>
   </div>
 
   <div class="group">
@@ -98,10 +65,9 @@
 
 </div>
 
-<!-- LIBRARIES -->
 <script src="https://unpkg.com/html-docx-js/dist/html-docx.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
 <script src="app.js"></script>
+
 </body>
 </html>
