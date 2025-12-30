@@ -84,7 +84,9 @@ body {
 .dark .editor-wrapper { background: #121212; border-color: #444; }
 .dark #editor { background: #121212; color: #fff; }
 .dark .ad-box { border-color: #444; }
-.dark button { background: #333; color: #fff; }
+.dark button {
+  filter: brightness(1.1);
+}
 
 /* BUTTON BASE */
 .controls button {
@@ -137,5 +139,16 @@ body {
 
 #capSentenceBtn {
   background: #6f42c1;
+}
+
+.controls {
+  position: sticky;
+  bottom: 0;
+  background: #f5f5f5;
+  padding-bottom: 8px;
+}
+
+.dark .controls {
+  background: #1e1e1e;
 }
 
