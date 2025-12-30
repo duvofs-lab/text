@@ -99,3 +99,18 @@ if ("serviceWorker" in navigator) {
   navigator.serviceWorker.register("sw.js");
 }
 
+const darkToggle = document.getElementById("darkToggle");
+const DARK_KEY = "duvofs_dark_mode";
+
+if (localStorage.getItem(DARK_KEY) === "on") {
+  document.documentElement.classList.add("dark");
+  darkToggle.textContent = "☀️";
+}
+
+darkToggle.onclick = () => {
+  document.documentElement.classList.toggle("dark");
+  const isDark = document.documentElement.classList.contains("dark");
+  localStorage.setItem(DARK_KEY, isDark ? "on" : "off");
+  darkToggle.textContent = isDark ? "☀️" : "🌙";
+};
+
