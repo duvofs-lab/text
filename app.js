@@ -24,13 +24,30 @@ document.getElementById("copyBtn").onclick = () =>
   navigator.clipboard.writeText(editor.innerText);
 
 /* FORMAT */
-function cmd(c) { document.execCommand(c); editor.focus(); }
-boldBtn.onclick = () => cmd("bold");
-italicBtn.onclick = () => cmd("italic");
-underlineBtn.onclick = () => cmd("underline");
-resetFormatBtn.onclick = () => {
-  editor.innerText = editor.innerText;
-  updateCounts();
+function applyFormat(command) {
+  const selection = window.getSelection();
+
+  // If text is selected → normal behavior
+  if (selection && selection.toString().length > 0) {
+    document.execCommand(command);
+    editor.focus();
+    return;
+  }
+
+  // If no selection → apply to ALL content
+  const range = document.createRange();
+  range.selectNodeContents(editor);
+
+  selection.removeAllRanges();
+  selection.addRange(range);
+
+  document.execCommand(command);
+
+  // Clear selection and place cursor at end
+  selection.removeAllRanges();
+  editor.focus();
+}
+
 };
 
 /* TRANSFORM */
