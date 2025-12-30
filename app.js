@@ -1,8 +1,10 @@
 const editor = document.getElementById("editor");
 const charCount = document.getElementById("charCount");
 const wordCount = document.getElementById("wordCount");
+const darkToggle = document.getElementById("darkToggle");
 
 const STORAGE_KEY = "duvofs_text_makeover";
+const DARK_KEY = "duvofs_dark_mode";
 
 /* LOAD */
 editor.innerHTML = localStorage.getItem(STORAGE_KEY) || "";
@@ -14,103 +16,76 @@ function updateCounts() {
   wordCount.textContent = text.trim() ? text.trim().split(/\s+/).length : 0;
   localStorage.setItem(STORAGE_KEY, editor.innerHTML);
 }
-
 editor.addEventListener("input", updateCounts);
 updateCounts();
 
 /* COPY */
-document.getElementById("copyBtn").onclick = () => {
+document.getElementById("copyBtn").onclick = () =>
   navigator.clipboard.writeText(editor.innerText);
-};
 
-/* FORMAT HELPERS */
-function applyCommand(cmd) {
-  document.execCommand(cmd, false, null);
-  editor.focus();
-}
-
-/* STYLE TOGGLES */
-document.getElementById("boldBtn").onclick = () => applyCommand("bold");
-document.getElementById("italicBtn").onclick = () => applyCommand("italic");
-document.getElementById("underlineBtn").onclick = () => applyCommand("underline");
-
-document.getElementById("resetFormatBtn").onclick = () => {
+/* FORMAT */
+function cmd(c) { document.execCommand(c); editor.focus(); }
+boldBtn.onclick = () => cmd("bold");
+italicBtn.onclick = () => cmd("italic");
+underlineBtn.onclick = () => cmd("underline");
+resetFormatBtn.onclick = () => {
   editor.innerText = editor.innerText;
   updateCounts();
 };
 
-/* TEXT TRANSFORM */
-function transformText(fn) {
+/* TRANSFORM */
+function transform(fn) {
   const sel = window.getSelection();
   if (sel.toString()) {
-    const range = sel.getRangeAt(0);
-    const span = document.createElement("span");
-    span.textContent = fn(sel.toString());
-    range.deleteContents();
-    range.insertNode(span);
-  } else {
-    editor.innerText = fn(editor.innerText);
-  }
+    const r = sel.getRangeAt(0);
+    const s = document.createElement("span");
+    s.textContent = fn(sel.toString());
+    r.deleteContents(); r.insertNode(s);
+  } else editor.innerText = fn(editor.innerText);
   updateCounts();
 }
+upperBtn.onclick = () => transform(t => t.toUpperCase());
+lowerBtn.onclick = () => transform(t => t.toLowerCase());
+capWordsBtn.onclick = () => transform(t => t.replace(/\b\w/g, c => c.toUpperCase()));
+capSentenceBtn.onclick = () => transform(t => t.replace(/(^\s*\w|[.!?]\s*\w)/g, c => c.toUpperCase()));
 
-document.getElementById("upperBtn").onclick = () =>
-  transformText(t => t.toUpperCase());
-
-document.getElementById("lowerBtn").onclick = () =>
-  transformText(t => t.toLowerCase());
-
-document.getElementById("capWordsBtn").onclick = () =>
-  transformText(t =>
-    t.replace(/\b\w/g, c => c.toUpperCase())
-  );
-
-document.getElementById("capSentenceBtn").onclick = () =>
-  transformText(t =>
-    t.replace(/(^\s*\w|[.!?]\s*\w)/g, c => c.toUpperCase())
-  );
-
-/* SAVE AS DOCX */
-document.getElementById("saveDocBtn").onclick = () => {
-  const html = `
-  <html><body>${editor.innerHTML}</body></html>`;
-  const blob = new Blob([html], {
-    type: "application/msword"
-  });
-
-  const link = document.createElement("a");
-  link.href = URL.createObjectURL(blob);
-  link.download = `duvofs-notepad-${Date.now()}.doc`;
-  link.click();
+/* DOCX */
+saveDocBtn.onclick = () => {
+  const html = `<html><body>${editor.innerHTML}</body></html>`;
+  const blob = window.htmlDocx.asBlob(html);
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = `duvofs-notepad-${Date.now()}.docx`;
+  a.click();
 };
 
 /* PDF */
-document.getElementById("pdfBtn").onclick = () => {
+pdfBtn.onclick = () => {
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF();
-  const text = editor.innerText || " ";
-  const lines = doc.splitTextToSize(text, 180);
-  doc.text(lines, 10, 10);
+  doc.text(doc.splitTextToSize(editor.innerText || " ", 180), 10, 10);
   doc.save(`duvofs-notepad-${Date.now()}.pdf`);
 };
 
-/* SERVICE WORKER */
-if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("sw.js");
-}
-
-const darkToggle = document.getElementById("darkToggle");
-const DARK_KEY = "duvofs_dark_mode";
-
+/* DARK MODE */
 if (localStorage.getItem(DARK_KEY) === "on") {
   document.documentElement.classList.add("dark");
   darkToggle.textContent = "☀️";
 }
-
 darkToggle.onclick = () => {
   document.documentElement.classList.toggle("dark");
-  const isDark = document.documentElement.classList.contains("dark");
-  localStorage.setItem(DARK_KEY, isDark ? "on" : "off");
-  darkToggle.textContent = isDark ? "☀️" : "🌙";
+  const on = document.documentElement.classList.contains("dark");
+  localStorage.setItem(DARK_KEY, on ? "on" : "off");
+  darkToggle.textContent = on ? "☀️" : "🌙";
 };
 
+/* SHORTCUTS */
+document.addEventListener("keydown", e => {
+  if (!e.ctrlKey) return;
+  if (e.key === "b") { e.preventDefault(); cmd("bold"); }
+  if (e.key === "i") { e.preventDefault(); cmd("italic"); }
+  if (e.key === "u") { e.preventDefault(); cmd("underline"); }
+});
+
+/* SERVICE WORKER */
+if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js");
