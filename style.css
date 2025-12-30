@@ -24,15 +24,8 @@ body {
   cursor: pointer;
 }
 
-#saveDocBtn {
-  background: #5cb85c;
-  color: #fff;
-}
-
-#pdfBtn {
-  background: #5b6cff;
-  color: #fff;
-}
+#saveDocBtn { background: #5cb85c; color: #fff; }
+#pdfBtn { background: #5b6cff; color: #fff; }
 
 /* STATS */
 .stats-bar {
@@ -53,9 +46,16 @@ body {
 /* ADS */
 .ad-box {
   width: 180px;
-  background: #fff;
   border: 2px dashed #ccc;
   min-height: 70vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ad-placeholder {
+  color: #999;
+  font-size: 14px;
 }
 
 /* EDITOR */
@@ -85,45 +85,14 @@ body {
   border-radius: 6px;
   border: none;
   cursor: pointer;
+  font-size: 15px;
 }
 
-.group {
-  margin-top: 10px;
-}
+.group { margin-top: 10px; }
 
-/* DARK MODE (future-ready) */
-.dark body {
-  background: #1e1e1e;
-  color: #fff;
-}
-
-.dark #editor {
-  background: #121212;
-  color: #fff;
-}
-
-.dark body {
-  background: #1e1e1e;
-  color: #ffffff;
-}
-
-.dark .editor-wrapper {
-  background: #121212;
-  border-color: #444;
-}
-
-.dark #editor {
-  background: #121212;
-  color: #ffffff;
-}
-
-.dark .ad-box {
-  background: #1e1e1e;
-  border-color: #444;
-}
-
-.dark button {
-  background: #333;
-  color: #fff;
-}
-
+/* DARK MODE */
+.dark body { background: #1e1e1e; color: #fff; }
+.dark .editor-wrapper { background: #121212; border-color: #444; }
+.dark #editor { background: #121212; color: #fff; }
+.dark .ad-box { border-color: #444; }
+.dark button { background: #333; color: #fff; }
