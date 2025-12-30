@@ -59,7 +59,20 @@
     <button id="boldBtn" title="Bold (Ctrl+B)">🅱</button>
     <button id="italicBtn" title="Italic (Ctrl+I)">𝑰</button>
     <button id="underlineBtn" title="Underline (Ctrl+U)">U̲</button>
-    <button id="resetFormatBtn" title="Clear Formatting">⨉</button>
+    resetFormatBtn.onclick = () => {
+  const selection = window.getSelection();
+
+  if (selection && selection.toString().length > 0) {
+    document.execCommand("removeFormat");
+  } else {
+    // Remove formatting from entire editor
+    const text = editor.innerText;
+    editor.innerText = text;
+  }
+
+  updateCounts();
+  editor.focus();
+};
   </div>
 
   <div class="group">
