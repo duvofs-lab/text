@@ -48,8 +48,8 @@ body {
 }
 
 #editor {
-  min-height: 70vh;
-  padding: 15px;
+  min-height: 56vh;   /* KEY CHANGE */
+  padding: 14px;
   outline: none;
   font-size: 14px;
 }
