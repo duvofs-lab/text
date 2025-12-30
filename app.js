@@ -6,26 +6,39 @@ const darkToggle = document.getElementById("darkToggle");
 const STORAGE_KEY = "duvofs_text_makeover";
 const DARK_KEY = "duvofs_dark_mode";
 
-/* LOAD */
+/* =========================
+   LOAD SAVED CONTENT
+========================= */
 editor.innerHTML = localStorage.getItem(STORAGE_KEY) || "";
 
-/* COUNT + SAVE */
+/* =========================
+   COUNT + AUTOSAVE
+========================= */
 function updateCounts() {
   const text = editor.innerText;
   charCount.textContent = text.length;
-  wordCount.textContent = text.trim() ? text.trim().split(/\s+/).length : 0;
+  wordCount.textContent = text.trim()
+    ? text.trim().split(/\s+/).length
+    : 0;
   localStorage.setItem(STORAGE_KEY, editor.innerHTML);
 }
+
 editor.addEventListener("input", updateCounts);
 updateCounts();
 
-/* COPY */
-document.getElementById("copyBtn").onclick = () =>
+/* =========================
+   COPY TEXT
+========================= */
+copyBtn.onclick = () => {
   navigator.clipboard.writeText(editor.innerText);
+};
 
-/* APPLY FORMAT (Works selected OR entire) */
+/* =========================
+   FORMAT (SELECTION OR ALL)
+========================= */
 function applyFormat(command) {
   const selection = window.getSelection();
+
   if (selection && selection.toString().length > 0) {
     document.execCommand(command);
     editor.focus();
@@ -34,7 +47,6 @@ function applyFormat(command) {
 
   const range = document.createRange();
   range.selectNodeContents(editor);
-
   selection.removeAllRanges();
   selection.addRange(range);
 
@@ -48,7 +60,9 @@ boldBtn.onclick = () => applyFormat("bold");
 italicBtn.onclick = () => applyFormat("italic");
 underlineBtn.onclick = () => applyFormat("underline");
 
-/* RESET FORMAT */
+/* =========================
+   RESET FORMATTING
+========================= */
 resetFormatBtn.onclick = () => {
   const selection = window.getSelection();
 
@@ -62,27 +76,53 @@ resetFormatBtn.onclick = () => {
   editor.focus();
 };
 
-/* TRANSFORM */
-function transform(fn) {
-  const sel = window.getSelection();
-  if (sel.toString()) {
-    const r = sel.getRangeAt(0);
-    const s = document.createElement("span");
-    s.textContent = fn(sel.toString());
-    r.deleteContents(); r.insertNode(s);
-  } else editor.innerText = fn(editor.innerText);
+/* =========================
+   TEXT TRANSFORM (FIXED)
+========================= */
+function transformText(fn) {
+  const selection = window.getSelection();
+
+  if (selection && selection.toString().length > 0) {
+    const range = selection.getRangeAt(0);
+    const span = document.createElement("span");
+    span.textContent = fn(selection.toString());
+    range.deleteContents();
+    range.insertNode(span);
+  } else {
+    editor.innerText = fn(editor.innerText);
+  }
+
   updateCounts();
 }
 
-upperBtn.onclick = () => transform(t => t.toUpperCase());
-lowerBtn.onclick = () => transform(t => t.toLowerCase());
+/* UPPER / LOWER */
+upperBtn.onclick = () =>
+  transformText(t => t.toUpperCase());
+
+lowerBtn.onclick = () =>
+  transformText(t => t.toLowerCase());
+
+/* CAPITALIZE WORDS (ALWAYS WORKS) */
 capWordsBtn.onclick = () =>
-  transform(t => t.replace(/\b\w/g, c => c.toUpperCase()));
+  transformText(t =>
+    t
+      .toLowerCase()
+      .replace(/\b\w/g, c => c.toUpperCase())
+  );
 
+/* CAPITALIZE SENTENCES (ALWAYS WORKS) */
 capSentenceBtn.onclick = () =>
-  transform(t => t.replace(/(^\s*\w|[.!?]\s*\w)/g, c => c.toUpperCase()));
+  transformText(t => {
+    t = t.toLowerCase();
+    return t.replace(
+      /(^\s*\w|[.!?]\s*\w)/g,
+      c => c.toUpperCase()
+    );
+  });
 
-/* DOCX */
+/* =========================
+   DOCX EXPORT (TRUE DOCX)
+========================= */
 saveDocBtn.onclick = () => {
   const html = `<html><body>${editor.innerHTML}</body></html>`;
   const blob = window.htmlDocx.asBlob(html);
@@ -92,15 +132,21 @@ saveDocBtn.onclick = () => {
   a.click();
 };
 
-/* PDF */
+/* =========================
+   PDF EXPORT
+========================= */
 pdfBtn.onclick = () => {
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF();
-  doc.text(doc.splitTextToSize(editor.innerText || " ", 180), 10, 10);
+  const text = editor.innerText || " ";
+  const lines = doc.splitTextToSize(text, 180);
+  doc.text(lines, 10, 10);
   doc.save(`duvofs-notepad-${Date.now()}.pdf`);
 };
 
-/* DARK MODE */
+/* =========================
+   DARK MODE (PERSISTENT)
+========================= */
 if (localStorage.getItem(DARK_KEY) === "on") {
   document.documentElement.classList.add("dark");
   darkToggle.textContent = "☀️";
@@ -108,18 +154,36 @@ if (localStorage.getItem(DARK_KEY) === "on") {
 
 darkToggle.onclick = () => {
   document.documentElement.classList.toggle("dark");
-  const on = document.documentElement.classList.contains("dark");
-  localStorage.setItem(DARK_KEY, on ? "on" : "off");
-  darkToggle.textContent = on ? "☀️" : "🌙";
+  const isDark = document.documentElement.classList.contains("dark");
+  localStorage.setItem(DARK_KEY, isDark ? "on" : "off");
+  darkToggle.textContent = isDark ? "☀️" : "🌙";
 };
 
-/* SHORTCUTS */
+/* =========================
+   KEYBOARD SHORTCUTS
+========================= */
 document.addEventListener("keydown", e => {
   if (!e.ctrlKey) return;
-  if (e.key === "b") { e.preventDefault(); applyFormat("bold"); }
-  if (e.key === "i") { e.preventDefault(); applyFormat("italic"); }
-  if (e.key === "u") { e.preventDefault(); applyFormat("underline"); }
+
+  switch (e.key.toLowerCase()) {
+    case "b":
+      e.preventDefault();
+      applyFormat("bold");
+      break;
+    case "i":
+      e.preventDefault();
+      applyFormat("italic");
+      break;
+    case "u":
+      e.preventDefault();
+      applyFormat("underline");
+      break;
+  }
 });
 
-/* SW */
-if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js");
+/* =========================
+   SERVICE WORKER
+========================= */
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("sw.js");
+}
