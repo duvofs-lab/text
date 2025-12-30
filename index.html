@@ -34,7 +34,20 @@
 <body>
 
 <header class="top-bar">
-  <button id="saveDocBtn">Save as Document</button>
+  document.getElementById("saveDocBtn").onclick = () => {
+  const content = `
+  <!DOCTYPE html>
+  <html>
+  <head><meta charset="UTF-8"></head>
+  <body>${editor.innerHTML}</body>
+  </html>`;
+
+  const blob = window.htmlDocx.asBlob(content);
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = `duvofs-notepad-${Date.now()}.docx`;
+  link.click();
+};
   <h1>Duvofs Text Makeover</h1>
   <button id="pdfBtn">Export as PDF</button>
 </header>
