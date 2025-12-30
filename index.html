@@ -2,12 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-
   <title>Text Formatter & Online Notepad | Duvofs Text Makeover</title>
-  <button id="darkToggle">🌙</button>
 
   <!-- SEO -->
-  <meta name="description" content="Free online text formatter and notepad. Count words and characters, make text bold, italic, underline, uppercase, lowercase, capitalize sentences and export as DOCX or PDF." />
+  <meta name="description" content="Free online text formatter and notepad with word count, character count, bold, italic, underline, uppercase, lowercase and DOCX export." />
   <meta name="keywords" content="online notepad, character count, word count, bold text, text formatter, text makeover, italic text, underline text" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
@@ -15,41 +13,18 @@
   <link rel="manifest" href="manifest.json" />
   <meta name="theme-color" content="#ffffff" />
 
-  <!-- Schema -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "WebApplication",
-    "name": "Duvofs Text Makeover",
-    "url": "https://text.duvofs.com",
-    "applicationCategory": "UtilityApplication",
-    "operatingSystem": "All",
-    "description": "Free online text formatter and notepad with word count, character count, bold, italic, underline, and export options."
-  }
-  </script>
-
   <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
 
 <header class="top-bar">
-  document.getElementById("saveDocBtn").onclick = () => {
-  const content = `
-  <!DOCTYPE html>
-  <html>
-  <head><meta charset="UTF-8"></head>
-  <body>${editor.innerHTML}</body>
-  </html>`;
-
-  const blob = window.htmlDocx.asBlob(content);
-  const link = document.createElement("a");
-  link.href = URL.createObjectURL(blob);
-  link.download = `duvofs-notepad-${Date.now()}.docx`;
-  link.click();
-};
+  <button id="saveDocBtn">Save as Document</button>
   <h1>Duvofs Text Makeover</h1>
-  <button id="pdfBtn">Export as PDF</button>
+  <div>
+    <button id="darkToggle">🌙</button>
+    <button id="pdfBtn">Export as PDF</button>
+  </div>
 </header>
 
 <div class="stats-bar">
@@ -61,24 +36,18 @@
 
   <!-- LEFT AD -->
   <aside class="ad-box">
-    <!-- Google Adsense (future) -->
+    <div class="ad-placeholder">Advertisement</div>
   </aside>
-  <div class="ad-placeholder">
-  Advertisement
-</div>
+
   <!-- EDITOR -->
   <main class="editor-wrapper">
-    <div id="editor" contenteditable="true" placeholder="Start typing here..."></div>
+    <div id="editor" contenteditable="true" spellcheck="false"></div>
   </main>
 
   <!-- RIGHT AD -->
   <aside class="ad-box">
-    <!-- Google Adsense (future) -->
+    <div class="ad-placeholder">Advertisement</div>
   </aside>
-  <div class="ad-placeholder">
-  Advertisement
-</div>
-
 
 </div>
 
@@ -87,27 +56,25 @@
   <button id="copyBtn">Copy Text</button>
 
   <div class="group">
-    <button id="boldBtn">Make it Bold</button>
-    <button id="italicBtn">Make it Italic</button>
-    <button id="underlineBtn">Underline Text</button>
-    <button id="resetFormatBtn">Back to Normal</button>
+    <button id="boldBtn" title="Bold (Ctrl+B)">🅱</button>
+    <button id="italicBtn" title="Italic (Ctrl+I)">𝑰</button>
+    <button id="underlineBtn" title="Underline (Ctrl+U)">U̲</button>
+    <button id="resetFormatBtn" title="Clear Formatting">⨉</button>
   </div>
 
   <div class="group">
-    <button id="upperBtn">UPPERCASE ALL</button>
-    <button id="lowerBtn">lowercase all</button>
+    <button id="upperBtn">UPPERCASE</button>
+    <button id="lowerBtn">lowercase</button>
     <button id="capWordsBtn">Capitalize Words</button>
     <button id="capSentenceBtn">Capitalize Sentences</button>
   </div>
 
 </div>
 
-  <script src="https://unpkg.com/html-docx-js/dist/html-docx.js"></script>
-
-<!-- PDF -->
+<!-- LIBRARIES -->
+<script src="https://unpkg.com/html-docx-js/dist/html-docx.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="app.js"></script>
 
+<script src="app.js"></script>
 </body>
 </html>
-
