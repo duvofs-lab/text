@@ -85,3 +85,57 @@ body {
 .dark #editor { background: #121212; color: #fff; }
 .dark .ad-box { border-color: #444; }
 .dark button { background: #333; color: #fff; }
+
+/* BUTTON BASE */
+.controls button {
+  padding: 8px 14px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  color: #fff;
+  transition: transform 0.1s ease, opacity 0.1s ease;
+}
+
+.controls button:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+/* BUTTON COLORS */
+#copyBtn {
+  background: #6c757d;
+}
+
+#boldBtn {
+  background: #0d6efd;
+}
+
+#italicBtn {
+  background: #6610f2;
+}
+
+#underlineBtn {
+  background: #198754;
+}
+
+#resetFormatBtn {
+  background: #dc3545;
+}
+
+#upperBtn {
+  background: #fd7e14;
+}
+
+#lowerBtn {
+  background: #20c997;
+}
+
+#capWordsBtn {
+  background: #0dcaf0;
+}
+
+#capSentenceBtn {
+  background: #6f42c1;
+}
+
