@@ -5,6 +5,7 @@ body {
   margin: 0;
   font-family: Arial, sans-serif;
   background: #f5f5f5;
+  color: #000;
 }
 
 /* =========================
@@ -52,7 +53,7 @@ body {
 }
 
 .ad-placeholder {
-  color: #999;
+  color: #777;
   font-size: 14px;
 }
 
@@ -95,7 +96,7 @@ body {
 }
 
 /* =========================
-   BUTTON BASE + FEEDBACK
+   BUTTONS
 ========================= */
 .controls button {
   padding: 8px 14px;
@@ -104,47 +105,18 @@ body {
   cursor: pointer;
   font-size: 14px;
   color: #fff;
-  transition:
-    transform 0.12s ease,
-    box-shadow 0.12s ease,
-    filter 0.12s ease,
-    background-color 0.12s ease;
-  box-shadow: 0 3px 0 rgba(0,0,0,0.15);
+  transition: transform 0.12s ease, filter 0.12s ease;
 }
 
-/* Hover feedback */
 .controls button:hover {
-  filter: brightness(1.08);
+  filter: brightness(1.1);
 }
 
-/* Click feedback (PRESS) */
 .controls button:active {
   transform: scale(0.96);
-  box-shadow: 0 1px 0 rgba(0,0,0,0.2);
 }
 
-/* Keyboard focus (accessibility) */
-.controls button:focus-visible {
-  outline: 2px solid rgba(0,0,0,0.25);
-  outline-offset: 2px;
-}
-
-/* =========================
-   SUCCESS FLASH (Copy, Save)
-========================= */
-.controls button.flash {
-  animation: flash-success 0.35s ease;
-}
-
-@keyframes flash-success {
-  0%   { filter: brightness(1); }
-  50%  { filter: brightness(1.4); }
-  100% { filter: brightness(1); }
-}
-
-/* =========================
-   BUTTON COLORS (Adsense-safe)
-========================= */
+/* Button colors */
 #copyBtn { background: #6c757d; }
 #boldBtn { background: #0d6efd; }
 #italicBtn { background: #6610f2; }
@@ -156,31 +128,57 @@ body {
 #capSentenceBtn { background: #6f42c1; }
 
 /* =========================
-   DARK MODE
+   SEO TEXT
+========================= */
+.seo-text {
+  max-width: 900px;
+  margin: 20px auto;
+  font-size: 13px;
+  color: #666;
+  text-align: center;
+}
+
+/* =========================
+   DARK MODE (IMPROVED)
 ========================= */
 .dark {
-  background: #1e1e1e;
-  color: #fff;
+  background: #121212;
+  color: #eaeaea;
+}
+
+.dark .top-bar,
+.dark .stats-bar {
+  background: #181818;
+  color: #ffffff;
 }
 
 .dark .editor-wrapper {
-  background: #121212;
-  border-color: #444;
+  background: #0f0f0f;
+  border-color: #666;
 }
 
 .dark #editor {
-  background: #121212;
-  color: #fff;
+  background: #0f0f0f;
+  color: #f5f5f5;
 }
 
 .dark .ad-box {
-  border-color: #444;
+  border-color: #777;
+}
+
+.dark .ad-placeholder {
+  color: #bbb;
 }
 
 .dark .controls {
-  background: #1e1e1e;
+  background: #181818;
+  border-top: 1px solid #333;
+}
+
+.dark .seo-text {
+  color: #aaa;
 }
 
 .dark button {
-  filter: brightness(1.05);
+  filter: brightness(1.15);
 }
