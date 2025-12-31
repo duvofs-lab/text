@@ -7,6 +7,51 @@ const STORAGE_KEY = "duvofs_text_makeover";
 const DARK_KEY = "duvofs_dark_mode";
 
 /* =========================
+   FONT SIZE CONTROLS
+========================= */
+const fontUpBtn = document.getElementById("fontUp");
+const fontDownBtn = document.getElementById("fontDown");
+const fontSizeLabel = document.getElementById("fontSizeLabel");
+
+const FONT_SIZE_KEY = "duvofs_font_size";
+const MIN_FONT = 10;
+const MAX_FONT = 24;
+
+// Default font size = current editor font size
+let fontSize =
+  parseInt(localStorage.getItem(FONT_SIZE_KEY), 10) ||
+  parseInt(window.getComputedStyle(editor).fontSize, 10);
+
+// Safety clamp
+fontSize = Math.min(Math.max(fontSize, MIN_FONT), MAX_FONT);
+
+// Apply on load
+editor.style.fontSize = fontSize + "px";
+fontSizeLabel.textContent = fontSize + "px";
+
+// Increase
+fontUpBtn.onclick = () => {
+  if (fontSize < MAX_FONT) {
+    fontSize++;
+    applyFontSize();
+  }
+};
+
+// Decrease
+fontDownBtn.onclick = () => {
+  if (fontSize > MIN_FONT) {
+    fontSize--;
+    applyFontSize();
+  }
+};
+
+function applyFontSize() {
+  editor.style.fontSize = fontSize + "px";
+  fontSizeLabel.textContent = fontSize + "px";
+  localStorage.setItem(FONT_SIZE_KEY, fontSize);
+}
+
+/* =========================
    LOAD SAVED CONTENT
 ========================= */
 editor.innerHTML = localStorage.getItem(STORAGE_KEY) || "";
