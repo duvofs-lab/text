@@ -127,7 +127,7 @@ body {
 }
 
 .font-controls button {
-  background: #343a40;
+  background: #495057; /* closer to toolbar tone */
   color: #fff;
   padding: 6px 10px;
   border-radius: 6px;
