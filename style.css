@@ -116,6 +116,35 @@ body {
   transform: scale(0.96);
 }
 
+/* =========================
+   FONT SIZE CONTROLS
+========================= */
+.font-controls {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-right: 10px;
+}
+
+.font-controls button {
+  background: #343a40;
+  color: #fff;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 13px;
+}
+
+#fontSizeLabel {
+  font-size: 13px;
+  color: #333;
+  min-width: 36px;
+  text-align: center;
+}
+
+.dark #fontSizeLabel {
+  color: #ddd;
+}
+
 /* Button colors */
 #copyBtn { background: #6c757d; }
 #boldBtn { background: #0d6efd; }
