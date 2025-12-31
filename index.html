@@ -2,17 +2,50 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Duvofs Text Makeover</title>
 
-  <meta name="description" content="Free online text formatter and notepad with word count, character count, bold, italic, underline, uppercase, lowercase and DOCX export." />
-  <meta name="keywords" content="online notepad, character count, word count, bold text, text formatter, text makeover, italic text, underline text" />
+  <title>
+    Text Formatter Online | Character Counter & Notepad – Duvofs
+  </title>
+
+  <!-- SEO META -->
+  <meta name="description" content="Free online text formatter and notepad. Count characters and words, convert uppercase to lowercase, capitalize words and sentences, and format text with bold, italic or underline." />
+  <meta name="keywords" content="text formatter, online text formatter, online notepad, character counter, word counter, capitalize text, uppercase lowercase converter, bold text online, text makeover" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <link rel="stylesheet" href="style.css" />
+  <!-- PWA -->
   <link rel="manifest" href="manifest.json" />
   <meta name="theme-color" content="#ffffff" />
 
+  <!-- SEO SCHEMA -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Duvofs Text Makeover",
+    "url": "https://text.duvofs.com",
+    "applicationCategory": "ProductivityApplication",
+    "operatingSystem": "Web",
+    "description": "Free online text formatter and notepad with character counter, word counter, uppercase lowercase converter, text capitalization, and formatting tools.",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "featureList": [
+      "Online text formatter",
+      "Character counter",
+      "Word counter",
+      "Uppercase and lowercase converter",
+      "Capitalize words and sentences",
+      "Bold, italic and underline text",
+      "Export text as DOCX or PDF"
+    ]
+  }
+  </script>
+
+  <link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
 
 <header class="top-bar">
@@ -36,7 +69,7 @@
   </aside>
 
   <main class="editor-wrapper">
-    <div id="editor" contenteditable="true"></div>
+    <div id="editor" contenteditable="true" spellcheck="false"></div>
   </main>
 
   <aside class="ad-box">
@@ -50,10 +83,10 @@
   <button id="copyBtn">Copy Text</button>
 
   <div class="group">
-    <button id="boldBtn" title="Bold (Ctrl+B)">🅱</button>
-    <button id="italicBtn" title="Italic (Ctrl+I)">𝑰</button>
-    <button id="underlineBtn" title="Underline (Ctrl+U)">U̲</button>
-    <button id="resetFormatBtn" title="Clear Formatting">⨉</button>
+    <button id="boldBtn">B</button>
+    <button id="italicBtn">I</button>
+    <button id="underlineBtn">U</button>
+    <button id="resetFormatBtn">✕</button>
   </div>
 
   <div class="group">
@@ -65,6 +98,14 @@
 
 </div>
 
+<!-- Optional visible SEO text -->
+<p class="seo-text">
+  Duvofs Text Makeover is a free online text formatter and notepad.
+  Easily count characters and words, format text, convert uppercase and lowercase,
+  capitalize sentences, and export formatted text as DOCX or PDF.
+</p>
+
+<!-- LIBRARIES -->
 <script src="https://unpkg.com/html-docx-js/dist/html-docx.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="app.js"></script>
