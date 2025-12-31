@@ -3,33 +3,44 @@ const charCount = document.getElementById("charCount");
 const wordCount = document.getElementById("wordCount");
 const darkToggle = document.getElementById("darkToggle");
 
-const STORAGE_KEY = "duvofs_text_makeover";
-const DARK_KEY = "duvofs_dark_mode";
+const copyBtn = document.getElementById("copyBtn");
+const boldBtn = document.getElementById("boldBtn");
+const italicBtn = document.getElementById("italicBtn");
+const underlineBtn = document.getElementById("underlineBtn");
+const resetFormatBtn = document.getElementById("resetFormatBtn");
+const upperBtn = document.getElementById("upperBtn");
+const lowerBtn = document.getElementById("lowerBtn");
+const capWordsBtn = document.getElementById("capWordsBtn");
+const capSentenceBtn = document.getElementById("capSentenceBtn");
+const saveDocBtn = document.getElementById("saveDocBtn");
+const pdfBtn = document.getElementById("pdfBtn");
 
-/* =========================
-   FONT SIZE CONTROLS
-========================= */
 const fontUpBtn = document.getElementById("fontUp");
 const fontDownBtn = document.getElementById("fontDown");
 const fontSizeLabel = document.getElementById("fontSizeLabel");
 
+const STORAGE_KEY = "duvofs_text_makeover";
+const DARK_KEY = "duvofs_dark_mode";
 const FONT_SIZE_KEY = "duvofs_font_size";
+
 const MIN_FONT = 10;
 const MAX_FONT = 24;
 
-// Default font size = current editor font size
+/* =========================
+   LOAD SAVED CONTENT FIRST
+========================= */
+editor.innerHTML = localStorage.getItem(STORAGE_KEY) || "";
+
+/* =========================
+   FONT SIZE CONTROLS
+========================= */
 let fontSize =
   parseInt(localStorage.getItem(FONT_SIZE_KEY), 10) ||
   parseInt(window.getComputedStyle(editor).fontSize, 10);
 
-// Safety clamp
 fontSize = Math.min(Math.max(fontSize, MIN_FONT), MAX_FONT);
+applyFontSize();
 
-// Apply on load
-editor.style.fontSize = fontSize + "px";
-fontSizeLabel.textContent = fontSize + "px";
-
-// Increase
 fontUpBtn.onclick = () => {
   if (fontSize < MAX_FONT) {
     fontSize++;
@@ -37,7 +48,6 @@ fontUpBtn.onclick = () => {
   }
 };
 
-// Decrease
 fontDownBtn.onclick = () => {
   if (fontSize > MIN_FONT) {
     fontSize--;
@@ -50,11 +60,6 @@ function applyFontSize() {
   fontSizeLabel.textContent = fontSize + "px";
   localStorage.setItem(FONT_SIZE_KEY, fontSize);
 }
-
-/* =========================
-   LOAD SAVED CONTENT
-========================= */
-editor.innerHTML = localStorage.getItem(STORAGE_KEY) || "";
 
 /* =========================
    COUNT + AUTOSAVE
@@ -84,20 +89,17 @@ copyBtn.onclick = () => {
 function applyFormat(command) {
   const selection = window.getSelection();
 
-  if (selection && selection.toString().length > 0) {
+  if (selection && selection.toString()) {
     document.execCommand(command);
-    editor.focus();
-    return;
+  } else {
+    const range = document.createRange();
+    range.selectNodeContents(editor);
+    selection.removeAllRanges();
+    selection.addRange(range);
+    document.execCommand(command);
+    selection.removeAllRanges();
   }
 
-  const range = document.createRange();
-  range.selectNodeContents(editor);
-  selection.removeAllRanges();
-  selection.addRange(range);
-
-  document.execCommand(command);
-
-  selection.removeAllRanges();
   editor.focus();
 }
 
@@ -106,28 +108,24 @@ italicBtn.onclick = () => applyFormat("italic");
 underlineBtn.onclick = () => applyFormat("underline");
 
 /* =========================
-   RESET FORMATTING
+   RESET FORMAT
 ========================= */
 resetFormatBtn.onclick = () => {
   const selection = window.getSelection();
-
-  if (selection && selection.toString().length > 0) {
+  if (selection && selection.toString()) {
     document.execCommand("removeFormat");
   } else {
     editor.innerText = editor.innerText;
   }
-
   updateCounts();
-  editor.focus();
 };
 
 /* =========================
-   TEXT TRANSFORM (FIXED)
+   TEXT TRANSFORM
 ========================= */
 function transformText(fn) {
   const selection = window.getSelection();
-
-  if (selection && selection.toString().length > 0) {
+  if (selection && selection.toString()) {
     const range = selection.getRangeAt(0);
     const span = document.createElement("span");
     span.textContent = fn(selection.toString());
@@ -136,37 +134,20 @@ function transformText(fn) {
   } else {
     editor.innerText = fn(editor.innerText);
   }
-
   updateCounts();
 }
 
-/* UPPER / LOWER */
-upperBtn.onclick = () =>
-  transformText(t => t.toUpperCase());
-
-lowerBtn.onclick = () =>
-  transformText(t => t.toLowerCase());
-
-/* CAPITALIZE WORDS (ALWAYS WORKS) */
+upperBtn.onclick = () => transformText(t => t.toUpperCase());
+lowerBtn.onclick = () => transformText(t => t.toLowerCase());
 capWordsBtn.onclick = () =>
+  transformText(t => t.toLowerCase().replace(/\b\w/g, c => c.toUpperCase()));
+capSentenceBtn.onclick = () =>
   transformText(t =>
-    t
-      .toLowerCase()
-      .replace(/\b\w/g, c => c.toUpperCase())
+    t.toLowerCase().replace(/(^\s*\w|[.!?]\s*\w)/g, c => c.toUpperCase())
   );
 
-/* CAPITALIZE SENTENCES (ALWAYS WORKS) */
-capSentenceBtn.onclick = () =>
-  transformText(t => {
-    t = t.toLowerCase();
-    return t.replace(
-      /(^\s*\w|[.!?]\s*\w)/g,
-      c => c.toUpperCase()
-    );
-  });
-
 /* =========================
-   DOCX EXPORT (TRUE DOCX)
+   EXPORTS
 ========================= */
 saveDocBtn.onclick = () => {
   const html = `<html><body>${editor.innerHTML}</body></html>`;
@@ -177,20 +158,15 @@ saveDocBtn.onclick = () => {
   a.click();
 };
 
-/* =========================
-   PDF EXPORT
-========================= */
 pdfBtn.onclick = () => {
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF();
-  const text = editor.innerText || " ";
-  const lines = doc.splitTextToSize(text, 180);
-  doc.text(lines, 10, 10);
+  doc.text(doc.splitTextToSize(editor.innerText || " ", 180), 10, 10);
   doc.save(`duvofs-notepad-${Date.now()}.pdf`);
 };
 
 /* =========================
-   DARK MODE (PERSISTENT)
+   DARK MODE
 ========================= */
 if (localStorage.getItem(DARK_KEY) === "on") {
   document.documentElement.classList.add("dark");
@@ -199,31 +175,19 @@ if (localStorage.getItem(DARK_KEY) === "on") {
 
 darkToggle.onclick = () => {
   document.documentElement.classList.toggle("dark");
-  const isDark = document.documentElement.classList.contains("dark");
-  localStorage.setItem(DARK_KEY, isDark ? "on" : "off");
-  darkToggle.textContent = isDark ? "☀️" : "🌙";
+  const on = document.documentElement.classList.contains("dark");
+  localStorage.setItem(DARK_KEY, on ? "on" : "off");
+  darkToggle.textContent = on ? "☀️" : "🌙";
 };
 
 /* =========================
-   KEYBOARD SHORTCUTS
+   SHORTCUTS
 ========================= */
 document.addEventListener("keydown", e => {
   if (!e.ctrlKey) return;
-
-  switch (e.key.toLowerCase()) {
-    case "b":
-      e.preventDefault();
-      applyFormat("bold");
-      break;
-    case "i":
-      e.preventDefault();
-      applyFormat("italic");
-      break;
-    case "u":
-      e.preventDefault();
-      applyFormat("underline");
-      break;
-  }
+  if (e.key === "b") { e.preventDefault(); applyFormat("bold"); }
+  if (e.key === "i") { e.preventDefault(); applyFormat("italic"); }
+  if (e.key === "u") { e.preventDefault(); applyFormat("underline"); }
 });
 
 /* =========================
